@@ -61,6 +61,7 @@ const getGoods = () => {
 
     if (more) {
         more.addEventListener('click', () => {
+            event.preventDefault()
             getData()
         })
     }
