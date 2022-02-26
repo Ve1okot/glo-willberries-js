@@ -6,6 +6,8 @@ const cart = function () {
     const cartTable = document.querySelector('.cart-table__goods')
     const modalForm = document.querySelector('.modal-form')
     const priceTotal = document.querySelector('.card-table__total')
+    const formInputName = document.querySelector('[name="nameCustomer"]')
+    const formInputPhone = document.querySelector('[name="phoneCustomer"]')
 
     const deleteCartItem = (id) => {
         const cart = JSON.parse(localStorage.getItem('cart'))
@@ -95,8 +97,14 @@ const cart = function () {
                     deleteCartItem(good.id)
                 }    
             })
-            priceTotal.innerHTML = `${23}$`
         })    
+        
+    let totalPriceCart = 0
+    goods.forEach((item) => {
+      const element = item.price * item.count
+      totalPriceCart += element
+    })
+    priceTotal.innerText = `${totalPriceCart}$`
     }
 
     const sendForm = () => {
@@ -107,10 +115,12 @@ const cart = function () {
             method: 'POST',
             body: JSON.stringify({
                 cart: cartArray, 
-                name: '',
-                phone: ''
+                name: formInputName.value,
+                phone: formInputPhone.value,
             })
         }).then(() => {
+            formInputName.value = ''
+            formInputPhone.value = ''
             cart.style.display = ''
             localStorage.removeItem('cart')
         })
@@ -118,7 +128,9 @@ const cart = function () {
 
     modalForm.addEventListener('submit', (e) => {
         e.preventDefault()
-        sendForm()
+        
+console.log(formInputName.value);
+        sendForm(formInputName.value, formInputPhone.value)
     })
 
 
@@ -158,5 +170,4 @@ const cart = function () {
         })
     }
 }
-
 cart()
